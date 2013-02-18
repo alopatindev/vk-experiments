@@ -43,37 +43,22 @@ while (scalar(@members) + 1 < $count) { # FIXME: check this
     print "OFFSET=$offset $#members < $count "; print scalar(@members),"\n\n";
 }
 
-##p $members;
-
-print "SCALAR=";
-print scalar(@members),"\n\n";
-#print @{$members}[0];
-#print "\n";
-#print @{$members}[1];
-#print "\n";
-#print @{$members}[999];
-#print "\n";
-#print $members[1000];
-
-##for $uid (@{$results->{'users'}}) {
-##    print "$uid\n";
-##}
+#print "SCALAR=";
+#print scalar(@members),"\n\n";
 
 # counting friends
-
 foreach $member0 (@members) {
     foreach $member1 (@members) {
-        print "areFriends($member0,$member1)\n";
-        $result = $vk->api("friends.areFriends", {uids => "$member0,$member1"});
-        print "friends=", @{$result}[0]->{friend_status},"\n";# == 3, "\n";
-        #print @{$result}[1]->{0};
+        if ($member0 != $member1) {
+            print "areFriends($member0,$member1)\n";
+            $result = $vk->api("friends.areFriends", {uids => "$member0,$member1"});
+            #print "friends=", @{$result}[1]->{friend_status},"\n";# == 3, "\n";
+            my $are_friends = @{$result}[0]->{friend_status} == 3 ||
+                              @{$result}[1]->{friend_status} == 3;
+            if ($are_friends) {
+            } else {
+            }
+        }
     }
     print "\n";
 }
-
-#my $member0 = '33588551';
-#my $member1 = '552756';
-#print "areFriends($member0,$member1)\n";
-#$result = $vk->api("friends.areFriends", {uids => "$member0,$member1"});
-#p $result;
-##print "friends=", @{$result}[0]->{'friend_status'},"\n"# == 3, "\n";
