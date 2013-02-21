@@ -7,7 +7,6 @@
 use VKontakte::Standalone;
 use utf8;
 my $vk = new VKontakte::Standalone:: "1973922";
-my $auth_uri = $vk->auth_uri("audio");
 
 my $query = $ARGV[0];
 if (length($query) == 0) {
@@ -15,15 +14,15 @@ if (length($query) == 0) {
     exit;
 }
 
-print "creating dir $query";
+print "creating dir $query\n";
 mkdir($query);
 chdir($query);
 
 my $auth_uri = $vk->auth_uri("audio");
+print "$auth_uri\n";
 
 system(('chromium-anon', $auth_uri));
-print "allow permissions and put a redirection link:";
-print "input redirect link:";
+print "allow permissions and put a redirection link: ";
 my $where = <STDIN>;
 #my $where = 'https://oauth.vk.com/blank.html#access_token=...';
 
