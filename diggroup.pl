@@ -5,20 +5,27 @@
 #use Data::Printer;
 use VKontakte::Standalone;
 
-local $SIG{__WARN__} = sub {};
-
-autoflush STDOUT;
-
 my $APP_ID = '1973922';
-my $GROUP_ID = 'fair_elections';
+
+local $SIG{__WARN__} = sub {};
+open(OUT, '>>out.txt');
+autoflush STDOUT;
+autoflush OUT;
+
+print 'input group id: ';
+#my $GROUP_ID = 'fair_elections';
+my $GROUP_ID = <STDIN>;
+chomp($GROUP_ID);
 
 my $vk = new VKontakte::Standalone:: $APP_ID;
 my $auth_uri = $vk->auth_uri('groups,friends');
-print $auth_uri;
-print "authorizing";
 
-system(('chromium-anon', $auth_uri));
-print "allow permissions and put a redirection link:";
+print "copy this link to browser:\n\n";
+print $auth_uri;
+print "\n\n";
+
+#system(('chromium-anon', $auth_uri));
+print 'allow permissions and input a redirection link: ';
 my $where = <STDIN>;
 #my $where = 'https://oauth.vk.com/blank.html#access_token=...';
 
@@ -40,7 +47,11 @@ while (scalar(@members) + 1 < $count) {
 }
 
 # counting friends
+my $i = 1;
 foreach $member (@members) {
+    print "processing ($i of $#members)\n";
+    $i++;
+
     $r = $vk->api("friends.get", {uid => "$member"});
     my $friends = ($r);
     my $friends_number = 0;
@@ -52,11 +63,15 @@ foreach $member (@members) {
 
     $r = $vk->api("users.get", {uids => "$member", fields => "first_name,last_name"});
 
-    my $member_first_name = @{$r}[0]->{first_name};;
-    my $member_last_name = @{$r}[0]->{last_name};;
+    my $member_first_name = @{$r}[0]->{first_name};
+    my $member_last_name = @{$r}[0]->{last_name};
 
-    print "$friends_number\t";
-    print "$member_first_name\t";
-    print "$member_last_name\t";
-    print "http://vk.com/id$member\n";
+    print OUT "$friends_number\t";
+    print OUT "$member_first_name\t";
+    print OUT "$member_last_name\t";
+    print OUT "http://vk.com/id$member\n";
 }
+
+close(OUT);
+
+print "done\n";
