@@ -8,7 +8,7 @@ use VKontakte::Standalone;
 my $APP_ID = '1973922';
 
 local $SIG{__WARN__} = sub {};
-open(OUT, '>>out.txt');
+open(OUT, '>out.txt');
 autoflush STDOUT;
 autoflush OUT;
 
