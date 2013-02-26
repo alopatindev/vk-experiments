@@ -9,6 +9,7 @@ my $APP_ID = '1973922';
 
 local $SIG{__WARN__} = sub {};
 open(OUT, '>out.txt');
+*STDERR = *OUT;
 autoflush STDOUT;
 autoflush OUT;
 

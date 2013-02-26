@@ -1,0 +1,11 @@
+--- Standalone.pm.orig	2013-02-27 00:35:44.323762842 +0400
++++ Standalone.pm	2013-02-27 00:35:58.436762248 +0400
+@@ -99,7 +99,7 @@ sub api {
+ 					croak "Captcha is needed and no captcha handler specified";
+ 				}
+ 			} else {
+-				croak "API call returned error ".$response->{error}{error_msg};
++				print STDERR "API call returned error ".$response->{error}{error_msg};
+ 			}
+ 		} else {
+ 			croak "API call didn't return response or error";
