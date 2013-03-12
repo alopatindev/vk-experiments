@@ -5,7 +5,14 @@
 
 #use Data::Printer;
 use VKontakte::Standalone;
+use locale;
 use utf8;
+use Encode;
+
+sub d {
+    return decode('utf8', $_[0]);
+}
+
 my $vk = new VKontakte::Standalone:: "1973922";
 
 my $query = $ARGV[0];
@@ -17,8 +24,9 @@ if (length($query) == 0) {
 print "creating dir $query\n";
 mkdir($query);
 chdir($query);
+my $q = d($query);
 
-my $auth_uri = $vk->auth_uri("audio");
+my $auth_uri = $vk->auth_uri('audio');
 print "$auth_uri\n";
 
 system(('chromium-anon', $auth_uri));
@@ -28,10 +36,8 @@ my $where = <STDIN>;
 
 $vk->redirected($where);
 
-print "querying $query...\n";
-
-my $results = $vk->api("audio.search", {q => $query});
-my $lquery = lc($query);
+my $results = $vk->api('audio.search', {q => $query});
+my $lquery = lc($q);
 my @downloaded_songs = ();
 
 for $song (@{$results}) {
@@ -41,12 +47,12 @@ for $song (@{$results}) {
 
     my $ltitle = lc($title);
     if ((lc($artist) eq $lquery) && !($ltitle ~~ @downloaded_songs)) {
-        my $filename = "$query - $title.mp3";
+        my $filename = "$q - $title.mp3";
         print "downloading $filename... ";
         system(('wget', $url, '-qcO', $filename));
-        print "ok\n";
         system(('mid3iconv', '-q', '--remove-v1', '-eCP1251', $filename));
-        system(('id3tag', "--artist=$query", $filename));
+        system(('mid3v2-2.7', '-C', '-a', $q, '-t', $title, $filename));
+        print "ok\n\n";
         push(@downloaded_songs, $ltitle);
     }
 }
