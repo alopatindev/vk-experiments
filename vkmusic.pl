@@ -1,12 +1,9 @@
 #!/usr/bin/perl
 
 # creates a directory with bandname, downloads it from vk.com, updates idv3-tags
-# FIXME: support UTF-8
 
 #use Data::Printer;
 use VKontakte::Standalone;
-use locale;
-use utf8;
 use Encode;
 
 sub d {
