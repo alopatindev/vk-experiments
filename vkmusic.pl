@@ -36,7 +36,7 @@ my $where = <STDIN>;
 
 $vk->redirected($where);
 
-my $results = $vk->api('audio.search', {q => $query});
+my $results = $vk->api('audio.search', {q => $query, count => 200});
 my $lquery = lc($q);
 my @downloaded_songs = ();
 
