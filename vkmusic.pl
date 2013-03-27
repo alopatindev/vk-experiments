@@ -26,7 +26,7 @@ my $q = d($query);
 my $auth_uri = $vk->auth_uri('audio');
 print "$auth_uri\n";
 
-system(('chromium-anon', $auth_uri));
+system(('chromium', $auth_uri));
 print "allow permissions and put a redirection link: ";
 my $where = <STDIN>;
 #my $where = 'https://oauth.vk.com/blank.html#access_token=...';
@@ -40,6 +40,7 @@ my @downloaded_songs = ();
 for $song (@{$results}) {
     my $artist = $song->{'artist'};
     my $title = $song->{'title'};
+    $title =~ s/^\s+|\s+$//g;
     my $url = $song->{'url'};
 
     my $ltitle = lc($title);
