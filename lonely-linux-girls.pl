@@ -59,6 +59,7 @@ sub process_group {
 
 sub checkout_members {
     my $members = $_[0];
+    my $group_id = $_[1];
     my $i = 0;
     foreach $member (@members) {
         my $progress = ($i * 100.0) / $#members;
@@ -76,13 +77,15 @@ sub checkout_members {
         my $last_name = @{$r}[0]->{last_name};
         my $is_girl = @{$r}[0]->{sex} == 1;
         my $online = @{$r}[0]->{online} == 1 ? 'ONLINE' : 'offline';
-        my $right_city = @{$r}[0]->{city} == CITY_ID;
+        my $city = @{$r}[0]->{city};
+        my $right_city = $city == $CITY_ID;
         my $is_single = @{$r}[0]->{relation} == 1;
         my $is_actively_searching = @{$r}[0]->{relation} == 2;
         my $right_relation = $is_single || $is_actively_seaching;
         if ($is_girl && $right_city && $right_relation) {
             print OUT "$first_name\t$last_name\t$online\t";
-            print OUT "http://vk.com/id$member\thttp://vk.com/club$group_id\n";
+            print OUT "http://vk.com/id$member\thttp://vk.com/club$group_id\t";
+            print OUT "$city\n";
         }
     }
 }
